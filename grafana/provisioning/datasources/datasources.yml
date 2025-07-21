@@ -1,0 +1,92 @@
+# Configuration file version
+# See here fore more information on configuration:
+# https://grafana.com/docs/grafana/latest/administration/provisioning/#example-data-source-configuration-file
+apiVersion: 1
+
+# Mark provisioned data sources for deletion if they are no longer in a provisioning file.
+prune: false
+
+# List of data sources to insert/update depending on what's available.
+datasources:
+  - name: Loki
+    type: loki
+    access: direct
+    orgId: 1
+    uid: grafana_lokiq
+    url: $LOKI_INTERNAL_URL
+    user:
+    database:
+    basicAuth:
+    basicAuthUser:
+    withCredentials:
+    isDefault: true
+    editable: true
+    version: 1
+    jsonData:
+      maxLines: 1000
+      derivedFields:
+        - datasourceUid: "grafana_tempo"
+          matcherType: "label"
+          matcherRegex: "trace_id"
+          name: "TraceID"
+          url: "$${__value.raw}"
+          urlDisplayLabel: "View Trace"
+          internal: true
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    orgId: 1
+    uid: grafana_prometheus
+    url: $PROMETHEUS_INTERNAL_URL
+    user:
+    database:
+    basicAuth:
+    basicAuthUser:
+    withCredentials:
+    isDefault: false
+    editable: true
+    version: 1
+  - name: Tempo
+    type: tempo
+    access: proxy
+    orgId: 1
+    uid: grafana_tempo
+    url: $TEMPO_INTERNAL_URL
+    user:
+    database:
+    basicAuth:
+    basicAuthUser:
+    withCredentials:
+    isDefault: false
+    editable: true
+    version: 1
+    jsonData:
+      tracesToLogsV2:
+        datasourceUid: "grafana_lokiq"
+        spanStartTimeShift: "-5m"
+        spanEndTimeShift: "5m"
+        tags:
+          [
+            { "key": "service.name", "value": "service_name" },
+            { "key": "service.namespace", "value": "service_namespace" },
+          ]
+        filterByTraceID: true
+        filterBySpanID: false
+        customQuery: true
+        query: '{trace_id="${__span.traceId}"}'
+      tracesToMetrics:
+        datasourceUid: "grafana_prometheus"
+        spanStartTimeShift: "-1h"
+        spanEndTimeShift: "1h"
+        tags: [{ "key": "service.name", "value": "service_name" }]
+        queries:
+          - name: "Sample query"
+            query: "sum(rate(traces_spanmetrics_latency_bucket{$$__tags}[5m]))"
+      serviceMap:
+        datasourceUid: "grafana_prometheus"
+      nodeGraph:
+        enabled: true
+      search:
+        hide: false
+      lokiSearch:
+        datasourceUid: "grafana_lokiq"

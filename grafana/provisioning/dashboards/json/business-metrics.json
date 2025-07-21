@@ -1,0 +1,784 @@
+{
+   "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "gridPos": {
+            "h": 6,
+            "w": 24,
+            "x": 0,
+            "y": 0
+        },
+        "id": 1,
+        "options": {
+            "code": {
+                "language": "plaintext",
+                "showLineNumbers": false,
+                "showMiniMap": false
+            },
+            "content": "# Business Metrics Dashboard\nThis dashboard provides an overview of order, product, fulfillment, and shipping metrics.",
+            "mode": "markdown"
+        },
+        "pluginVersion": "10.0.3",
+        "type": "text"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": {
+                    "mode": "palette-classic"
+                },
+                "custom": {
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "drawStyle": "line",
+                    "fillOpacity": 20,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                    },
+                    "lineInterpolation": "linear",
+                    "lineWidth": 2,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                        "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "spanNulls": false,
+                    "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                        "mode": "off"
+                    }
+                },
+                "mappings": [],
+                "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                        {
+                            "color": "green",
+                            "value": null
+                        },
+                        {
+                            "color": "red",
+                            "value": 80
+                        }
+                    ]
+                },
+                "unit": "short"
+            },
+            "overrides": []
+        },
+        "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 6
+        },
+        "id": 2,
+        "options": {
+            "legend": {
+                "calcs": ["mean", "max"],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+            },
+            "tooltip": {
+                "mode": "single",
+                "sort": "none"
+            }
+        },
+        "targets": [
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${DS_PROMETHEUS}"
+                },
+                "editorMode": "code",
+                "expr": "sum(increase(business_orders_processed_total[1h])) by (shop_type, fulfillment_status)",
+                "legendFormat": "{{shop_type}} - {{fulfillment_status}}",
+                "range": true,
+                "refId": "A"
+            }
+        ],
+        "title": "Orders Processed (1h)",
+        "type": "timeseries"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": {
+                    "mode": "palette-classic"
+                },
+                "custom": {
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "drawStyle": "line",
+                    "fillOpacity": 20,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                    },
+                    "lineInterpolation": "linear",
+                    "lineWidth": 2,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                        "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "spanNulls": false,
+                    "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                        "mode": "off"
+                    }
+                },
+                "mappings": [],
+                "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                        {
+                            "color": "green",
+                            "value": null
+                        },
+                        {
+                            "color": "red",
+                            "value": 80
+                        }
+                    ]
+                },
+                "unit": "short"
+            },
+            "overrides": []
+        },
+        "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 6
+        },
+        "id": 3,
+        "options": {
+            "legend": {
+                "calcs": ["mean", "max"],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+            },
+            "tooltip": {
+                "mode": "single",
+                "sort": "none"
+            }
+        },
+        "targets": [
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${DS_PROMETHEUS}"
+                },
+                "editorMode": "code",
+                "expr": "sum(increase(business_products_updated_total[1h])) by (shop_type)",
+                "legendFormat": "{{shop_type}}",
+                "range": true,
+                "refId": "A"
+            }
+        ],
+        "title": "Products Updated (1h)",
+        "type": "timeseries"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": {
+                    "mode": "palette-classic"
+                },
+                "custom": {
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "drawStyle": "line",
+                    "fillOpacity": 20,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                    },
+                    "lineInterpolation": "linear",
+                    "lineWidth": 2,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                        "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "spanNulls": false,
+                    "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                        "mode": "off"
+                    }
+                },
+                "mappings": [],
+                "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                        {
+                            "color": "green",
+                            "value": null
+                        },
+                        {
+                            "color": "red",
+                            "value": 80
+                        }
+                    ]
+                },
+                "unit": "short"
+            },
+            "overrides": []
+        },
+        "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 14
+        },
+        "id": 4,
+        "options": {
+            "legend": {
+                "calcs": ["mean", "max"],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+            },
+            "tooltip": {
+                "mode": "single",
+                "sort": "none"
+            }
+        },
+        "targets": [
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${DS_PROMETHEUS}"
+                },
+                "editorMode": "code",
+                "expr": "sum(increase(business_orders_processed_total{fulfillment_status=\"success\"}[24h])) / sum(increase(business_orders_processed_total[24h])) * 100",
+                "legendFormat": "Success Rate",
+                "range": true,
+                "refId": "A"
+            }
+        ],
+        "title": "Order Processing Success Rate (24h)",
+        "type": "gauge"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": {
+                    "mode": "palette-classic"
+                },
+                "custom": {
+                    "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                    }
+                },
+                "mappings": []
+            },
+            "overrides": []
+        },
+        "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 14
+        },
+        "id": 5,
+        "options": {
+            "legend": {
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": true
+            },
+            "pieType": "pie",
+            "reduceOptions": {
+                "calcs": [
+                    "sum"
+                ],
+                "fields": "",
+                "values": false
+            },
+            "tooltip": {
+                "mode": "single",
+                "sort": "none"
+            }
+        },
+        "pluginVersion": "10.0.3",
+        "targets": [
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${DS_PROMETHEUS}"
+                },
+                "editorMode": "code",
+                "expr": "sum(increase(business_orders_processed_total[7d])) by (shop_type)",
+                "legendFormat": "{{shop_type}}",
+                "range": true,
+                "refId": "A"
+            }
+        ],
+        "title": "Orders by Shop Type (7d)",
+        "type": "piechart"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": {
+                    "mode": "palette-classic"
+                },
+                "custom": {
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "drawStyle": "line",
+                    "fillOpacity": 20,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                    },
+                    "lineInterpolation": "linear",
+                    "lineWidth": 2,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                        "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "spanNulls": false,
+                    "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                        "mode": "off"
+                    }
+                },
+                "mappings": [],
+                "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                        {
+                            "color": "green",
+                            "value": null
+                        },
+                        {
+                            "color": "red",
+                            "value": 80
+                        }
+                    ]
+                },
+                "unit": "short"
+            },
+            "overrides": []
+        },
+        "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 14
+        },
+        "id": 6,
+        "options": {
+            "legend": {
+                "calcs": ["mean", "max"],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+            },
+            "tooltip": {
+                "mode": "single",
+                "sort": "none"
+            }
+        },
+        "targets": [
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${DS_PROMETHEUS}"
+                },
+                "editorMode": "code",
+                "expr": "sum(increase(business_fulfillments_created_total[1h])) by (shop_type, fulfillment_status, fulfillment_type)",
+                "legendFormat": "{{shop_type}} - {{fulfillment_status}} - {{fulfillment_type}}",
+                "range": true,
+                "refId": "A"
+            }
+        ],
+        "title": "Fulfillments Created (1h)",
+        "type": "timeseries"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": {
+                    "mode": "palette-classic"
+                },
+                "custom": {
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "drawStyle": "line",
+                    "fillOpacity": 20,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                    },
+                    "lineInterpolation": "linear",
+                    "lineWidth": 2,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                        "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "spanNulls": false,
+                    "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                        "mode": "off"
+                    }
+                },
+                "mappings": [],
+                "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                        {
+                            "color": "green",
+                            "value": null
+                        },
+                        {
+                            "color": "red",
+                            "value": 80
+                        }
+                    ]
+                },
+                "unit": "short"
+            },
+            "overrides": []
+        },
+        "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 14
+        },
+        "id": 7,
+        "options": {
+            "legend": {
+                "calcs": ["mean", "max"],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+            },
+            "tooltip": {
+                "mode": "single",
+                "sort": "none"
+            }
+        },
+        "targets": [
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${DS_PROMETHEUS}"
+                },
+                "editorMode": "code",
+                "expr": "sum(increase(business_shipping_labels_purchased_total[1h])) by (carrier, service_type, success)",
+                "legendFormat": "{{carrier}} - {{service_type}} - success={{success}}",
+                "range": true,
+                "refId": "A"
+            }
+        ],
+        "title": "Shipping Labels Purchased (1h)",
+        "type": "timeseries"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": {
+                    "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                        {
+                            "color": "green",
+                            "value": null
+                        },
+                        {
+                            "color": "red",
+                            "value": 0.2
+                        }
+                    ]
+                },
+                "unit": "percentunit"
+            },
+            "overrides": []
+        },
+        "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 22
+        },
+        "id": 8,
+        "options": {
+            "orientation": "auto",
+            "reduceOptions": {
+                "calcs": [
+                    "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+            },
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true
+        },
+        "pluginVersion": "10.0.3",
+        "targets": [
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${DS_PROMETHEUS}"
+                },
+                "editorMode": "code",
+                "expr": "sum(increase(business_shipping_labels_purchased_total{success=\"false\"}[24h])) / sum(increase(business_shipping_labels_purchased_total[24h]))",
+                "legendFormat": "Shipping Label Error Rate",
+                "range": true,
+                "refId": "A"
+            }
+        ],
+        "title": "Shipping Label Error Rate (24h)",
+        "type": "gauge"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": {
+                    "mode": "palette-classic"
+                },
+                "custom": {
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 80,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                    },
+                    "lineWidth": 1,
+                    "scaleDistribution": {
+                        "type": "linear"
+                    },
+                    "thresholdsStyle": {
+                        "mode": "off"
+                    }
+                },
+                "mappings": [],
+                "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                        {
+                            "color": "green",
+                            "value": null
+                        },
+                        {
+                            "color": "red",
+                            "value": 80
+                        }
+                    ]
+                }
+            },
+            "overrides": []
+        },
+        "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 22
+        },
+        "id": 9,
+        "options": {
+            "barRadius": 0,
+            "barWidth": 0.5,
+            "groupWidth": 0.7,
+            "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": true
+            },
+            "orientation": "auto",
+            "showValue": "auto",
+            "stacking": "none",
+            "tooltip": {
+                "mode": "single",
+                "sort": "none"
+            },
+            "xTickLabelRotation": 0,
+            "xTickLabelSpacing": 0
+        },
+        "pluginVersion": "10.0.3",
+        "targets": [
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${DS_PROMETHEUS}"
+                },
+                "editorMode": "code",
+                "expr": "sum(increase(business_orders_processed_total[1d])) by (shop_type, fulfillment_status)",
+                "legendFormat": "{{shop_type}} - {{fulfillment_status}}",
+                "range": true,
+                "refId": "A"
+            }
+        ],
+        "title": "Daily Order Processing by Shop Type",
+        "type": "barchart"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["business", "orders", "products"],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Prometheus",
+          "value": "Prometheus"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "DS_PROMETHEUS",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "",
+  "title": "Business Metrics Dashboard",
+  "uid": "business-metrics",
+  "version": 1,
+  "weekStart": ""
+}

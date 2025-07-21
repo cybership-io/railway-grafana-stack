@@ -1,0 +1,535 @@
+{
+    "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "# Integrations Metrics Dashboard\nThis dashboard provides detailed insights into integrations performance metrics, including API call duration by operation type, distribution of query times, and error rates.",
+          "mode": "markdown"
+        },
+        "pluginVersion": "10.0.3",
+        "type": "text"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": {
+                    "mode": "palette-classic"
+                },
+                "custom": {
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "drawStyle": "line",
+                    "fillOpacity": 20,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                    },
+                    "lineInterpolation": "linear",
+                    "lineWidth": 2,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                        "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "spanNulls": false,
+                    "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                        "mode": "off"
+                    }
+                },
+                "mappings": [],
+                "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                        {
+                            "color": "green",
+                            "value": null
+                        },
+                        {
+                            "color": "red",
+                            "value": 80
+                        }
+                    ]
+                },
+                "unit": "s"
+            },
+            "overrides": []
+        },
+        "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 6
+        },
+        "id": 2,
+        "options": {
+            "legend": {
+                "calcs": ["mean", "max"],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+            },
+            "tooltip": {
+                "mode": "single",
+                "sort": "none"
+            }
+        },
+        "targets": [
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${DS_PROMETHEUS}"
+                },
+                "editorMode": "code",
+                "expr": "rate(integration_api_duration_seconds_sum{integration=~\"$integration\"}[5m]) / rate(integration_api_duration_seconds_count{integration=~\"$integration\"}[5m])",
+                "legendFormat": "{{integration}} - {{operation_type}}",
+                "range": true,
+                "refId": "A"
+            }
+        ],
+        "title": "API Call Duration by Integration",
+        "type": "timeseries"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": {
+                    "mode": "palette-classic"
+                },
+                "custom": {
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "drawStyle": "line",
+                    "fillOpacity": 20,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                    },
+                    "lineInterpolation": "linear",
+                    "lineWidth": 2,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                        "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "spanNulls": false,
+                    "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                        "mode": "off"
+                    }
+                },
+                "mappings": [],
+                "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                        {
+                            "color": "green",
+                            "value": null
+                        },
+                        {
+                            "color": "red",
+                            "value": 80
+                        }
+                    ]
+                }
+            },
+            "overrides": []
+        },
+        "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 6
+        },
+        "id": 3,
+        "options": {
+            "legend": {
+                "calcs": ["mean", "max"],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+            },
+            "tooltip": {
+                "mode": "single",
+                "sort": "none"
+            }
+        },
+        "targets": [
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${DS_PROMETHEUS}"
+                },
+                "editorMode": "code",
+                "expr": "sum(rate(integration_api_errors_total{integration=~\"$integration\"}[5m])) by (integration, error_category)",
+                "legendFormat": "{{integration}} - {{error_category}}",
+                "range": true,
+                "refId": "A"
+            }
+        ],
+        "title": "Error Rates by Integration",
+        "type": "timeseries"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": {
+                    "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                        {
+                            "color": "green",
+                            "value": null
+                        },
+                        {
+                            "color": "yellow",
+                            "value": 80
+                        },
+                        {
+                            "color": "red",
+                            "value": 95
+                        }
+                    ]
+                },
+                "unit": "percent"
+            },
+            "overrides": []
+        },
+        "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 14
+        },
+        "id": 4,
+        "options": {
+            "orientation": "auto",
+            "reduceOptions": {
+                "calcs": [
+                    "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+            },
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true
+        },
+        "pluginVersion": "10.0.3",
+        "targets": [
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${DS_PROMETHEUS}"
+                },
+                "editorMode": "code",
+                "expr": "(1 - sum(rate(integration_api_errors_total{integration=~\"$integration\"}[5m])) / sum(rate(integration_api_duration_seconds_count{integration=~\"$integration\"}[5m]))) * 100",
+                "legendFormat": "{{integration}}",
+                "range": true,
+                "refId": "A"
+            }
+        ],
+        "title": "API Success Rate by Integration",
+        "type": "gauge"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": {
+                    "mode": "palette-classic"
+                },
+                "custom": {
+                    "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                    }
+                },
+                "mappings": []
+            },
+            "overrides": []
+        },
+        "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 14
+        },
+        "id": 5,
+        "options": {
+            "legend": {
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": true
+            },
+            "pieType": "pie",
+            "reduceOptions": {
+                "calcs": [
+                    "sum"
+                ],
+                "fields": "",
+                "values": false
+            },
+            "tooltip": {
+                "mode": "single",
+                "sort": "none"
+            }
+        },
+        "pluginVersion": "10.0.3",
+        "targets": [
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${DS_PROMETHEUS}"
+                },
+                "editorMode": "code",
+                "expr": "sum(rate(integration_api_duration_seconds_count{integration=~\"$integration\"}[5m])) by (operation_type)",
+                "legendFormat": "{{operation_type}}",
+                "range": true,
+                "refId": "A"
+            }
+        ],
+        "title": "Operation Distribution",
+        "type": "piechart"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": {
+                    "mode": "palette-classic"
+                },
+                "custom": {
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 80,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                    },
+                    "lineWidth": 1,
+                    "scaleDistribution": {
+                        "type": "linear"
+                    },
+                    "thresholdsStyle": {
+                        "mode": "off"
+                    }
+                },
+                "mappings": [],
+                "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                        {
+                            "color": "green",
+                            "value": null
+                        },
+                        {
+                            "color": "red",
+                            "value": 80
+                        }
+                    ]
+                }
+            },
+            "overrides": []
+        },
+        "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 22
+        },
+        "id": 6,
+        "options": {
+            "barRadius": 0,
+            "barWidth": 0.5,
+            "groupWidth": 0.7,
+            "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": true
+            },
+            "orientation": "auto",
+            "showValue": "auto",
+            "stacking": "none",
+            "tooltip": {
+                "mode": "single",
+                "sort": "none"
+            },
+            "xTickLabelRotation": 0,
+            "xTickLabelSpacing": 0
+        },
+        "pluginVersion": "10.0.3",
+        "targets": [
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${DS_PROMETHEUS}"
+                },
+                "editorMode": "code",
+                "expr": "sum(rate(integration_api_duration_seconds_count{integration=~\"$integration\"}[5m])) by (integration, operation_type)",
+                "legendFormat": "{{integration}} - {{operation_type}}",
+                "range": true,
+                "refId": "A"
+            }
+        ],
+        "title": "API Calls by Integration and Operation",
+        "type": "barchart"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["integrations", "api", "metrics"],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Prometheus",
+          "value": "Prometheus"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "DS_PROMETHEUS",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": ".*"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "label_values(integration_api_duration_seconds_count, integration)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Integration",
+        "multi": true,
+        "name": "integration",
+        "options": [],
+        "query": {
+          "query": "label_values(integration_api_duration_seconds_count, integration)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "",
+  "title": "Integration Metrics",
+  "uid": "integration-metrics",
+  "version": 1,
+  "weekStart": ""
+}
