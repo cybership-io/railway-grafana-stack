@@ -10,3 +10,7 @@ EXPOSE 9090
 
 # Set default PORT environment variable
 ENV PORT=9090
+
+# Add health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT}/-/healthy || exit 1
