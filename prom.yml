@@ -1,0 +1,49 @@
+global:
+  scrape_interval: 15s # Default scrape interval
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # Your server via Railway private networking
+  - job_name: "server"
+    scheme: http
+    static_configs:
+      - targets: ["server.railway.internal:3000"]
+    metrics_path: /metrics
+    scrape_interval: 15s
+
+  # Cybership Web (if you add metrics endpoint)
+  # - job_name: 'cybership-web'
+  #   scheme: https
+  #   static_configs:
+  #     - targets: ['cybership-web-production.up.railway.app:443']
+  #   metrics_path: /api/metrics
+  #   scrape_interval: 15s
+  #   tls_config:
+  #     insecure_skip_verify: true
+
+  # Cybership Support (if you add metrics endpoint)
+  # - job_name: 'cybership-support'
+  #   scheme: https
+  #   static_configs:
+  #     - targets: ['cybership-support-production.up.railway.app:443']
+  #   metrics_path: /api/metrics
+  #   scrape_interval: 15s
+  #   tls_config:
+  #     insecure_skip_verify: true
+
+  # Example for other services (uncomment and modify as needed)
+  # - job_name: 'example_api'
+  #   scheme: http
+  #   static_configs:
+  #     - targets: ['example_api:9091']
+
+  # - job_name: 'your-job-name'
+  #   scheme: https
+  #   static_configs:
+  #     - targets: ['URL_GOES_HERE']
+  #   basic_auth:
+  #     username: HTTP_AUTH_USERNAME_GOES_HERE
+  #     password: HTTP_AUTH_PASSWORD_GOES_HERE
