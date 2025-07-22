@@ -2,10 +2,10 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "DOCKERFILE",
-    "dockerfilePath": "Dockerfile"
+    "dockerfilePath": "prometheus/Dockerfile"
   },
   "deploy": {
-    "startCommand": "prometheus --config.file=/etc/prometheus/prom.yml --storage.tsdb.path=/prometheus --web.console.libraries=/etc/prometheus/console_libraries --web.console.templates=/etc/prometheus/consoles --web.enable-lifecycle --web.listen-address=0.0.0.0:$PORT",
+    "startCommand": "sh -c 'prometheus --config.file=/etc/prometheus/prom.yml --storage.tsdb.path=/prometheus --web.console.libraries=/etc/prometheus/console_libraries --web.console.templates=/etc/prometheus/consoles --web.enable-lifecycle --web.listen-address=0.0.0.0:${PORT:-9090}'",
     "restartPolicyType": "ON_FAILURE"
   }
 } 
