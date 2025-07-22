@@ -8,8 +8,8 @@ COPY prom.yml /etc/prometheus/prom.yml
 # Expose the port
 EXPOSE 9090
 
-# Set default PORT environment variable
-ENV PORT=9090
+# Railway will set PORT environment variable dynamically
+# ENV PORT=9090
 
 # Add health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
