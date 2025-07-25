@@ -1,5 +1,14 @@
 [phases.build]
-cmds = ["echo 'Using existing Dockerfile for build'"]
+cmds = [
+  "echo 'Building with Dockerfile...'",
+  "docker build -t prometheus-app .",
+  "docker create --name temp-container prometheus-app",
+  "docker cp temp-container:/etc/prometheus /etc/",
+  "docker cp temp-container:/usr/local/bin/prometheus /usr/local/bin/",
+  "docker cp temp-container:/etc/prometheus/console_libraries /etc/prometheus/",
+  "docker cp temp-container:/etc/prometheus/consoles /etc/prometheus/",
+  "docker rm temp-container"
+]
 
 [phases.setup]
 cmds = [
