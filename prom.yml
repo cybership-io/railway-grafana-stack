@@ -12,6 +12,9 @@ scrape_configs:
     static_configs:
       - targets: ["server.railway.internal:3000"]
     metrics_path: /metrics
+    authorization:
+      type: Bearer
+      credentials_file: /etc/prometheus/secrets/token
     scrape_interval: 15s
 
   # Cybership Web (if you add metrics endpoint)
