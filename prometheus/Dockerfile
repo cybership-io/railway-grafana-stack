@@ -19,4 +19,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     --user=${PROMETHEUS_USER:-admin} --password=${PROMETHEUS_PASSWORD:-admin} \
     http://localhost:${PORT:-9090}/-/healthy || exit 1
 
-CMD ["/start.sh"]
+ENTRYPOINT ["/start.sh"]
