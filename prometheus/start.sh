@@ -51,14 +51,3 @@ else
     touch /prometheus/secrets/token
     echo "No auth token provided"
 fi
-
-echo "Starting Prometheus..."
-
-exec prometheus \
-    --config.file=/etc/prometheus/prom.yml \
-    --web.config.file=/prometheus/config/web-config.yml \
-    --storage.tsdb.path=/prometheus \
-    --web.console.libraries=/etc/prometheus/console_libraries \
-    --web.console.templates=/etc/prometheus/consoles \
-    --web.enable-lifecycle \
-    --web.listen-address=0.0.0.0:${PORT:-9090}
