@@ -32,15 +32,12 @@ RUN echo "Downloading Prometheus version: ${VERSION}" \
 RUN chown -R nobody:nobody /etc/prometheus /prometheus
 
 COPY prom.yml /etc/prometheus/prom.yml
-COPY start.sh /start.sh
+COPY setup.sh /setup.sh
 
-RUN chmod +x /start.sh
+RUN chmod +x /setup.sh
 
 USER nobody
 
 EXPOSE 9090
 
-# HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
-#     CMD wget --no-verbose --tries=1 --spider http://localhost:$PORT/-/healthy || exit 1
-
-ENTRYPOINT ["/start.sh"]
+CMD ["sh", "-c", "/setup.sh && prometheus --config.file=/etc/prometheus/prom.yml --web.config.file=/prometheus/config/web-config.yml --storage.tsdb.path=/prometheus --web.console.libraries=/etc/prometheus/console_libraries --web.console.templates=/etc/prometheus/consoles --web.enable-lifecycle --web.listen-address=0.0.0.0:${PORT:-9090}"]

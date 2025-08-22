@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e  # Exit on any error
+set -e  
 
 PROMETHEUS_USER=${PROMETHEUS_USER:-admin}
 PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD:-admin}
@@ -35,7 +35,6 @@ fi
 
 echo "Creating web config..."
 
-# Create a writable directory in the home directory
 mkdir -p /prometheus/config
 cat > /prometheus/config/web-config.yml << EOF
 basic_auth_users:
@@ -44,7 +43,6 @@ EOF
 
 echo "Web config created successfully"
 
-# Handle auth token in prometheus directory
 mkdir -p /prometheus/secrets
 if [ -n "$PROMETHEUS_AUTH_TOKEN" ]; then
     echo "$PROMETHEUS_AUTH_TOKEN" > /prometheus/secrets/token
@@ -55,13 +53,4 @@ else
     echo "No auth token provided"
 fi
 
-echo "Starting Prometheus on port: ${PORT:-9090}"
-
-exec prometheus \
-    --config.file=/etc/prometheus/prom.yml \
-    --web.config.file=/prometheus/config/web-config.yml \
-    --storage.tsdb.path=/prometheus \
-    --web.console.libraries=/etc/prometheus/console_libraries \
-    --web.console.templates=/etc/prometheus/consoles \
-    --web.enable-lifecycle \
-    --web.listen-address=0.0.0.0:${PORT:-9090}
+echo "Authentication setup complete"
