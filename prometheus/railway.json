@@ -5,7 +5,7 @@
       "dockerfilePath": "prometheus/Dockerfile"
     },
     "deploy": {
-      "startCommand": "sh -c 'mkdir -p /etc/prometheus/secrets && echo \"$PROMETHEUS_AUTH_TOKEN\" > /etc/prometheus/secrets/token && chmod 600 /etc/prometheus/secrets/token && prometheus --config.file=/etc/prometheus/prom.yml --web.config.file=/prometheus/config/web-config.yml --storage.tsdb.path=/prometheus --web.console.libraries=/etc/prometheus/console_libraries --web.console.templates=/etc/prometheus/consoles --web.enable-lifecycle --web.listen-address=0.0.0.0:9090'",
+      "startCommand": "sh -c '/setup.sh && prometheus --config.file=/etc/prometheus/prom.yml --web.config.file=/prometheus/config/web-config.yml --storage.tsdb.path=/prometheus --web.console.libraries=/etc/prometheus/console_libraries --web.console.templates=/etc/prometheus/consoles --web.enable-lifecycle --web.listen-address=0.0.0.0:${PORT:-9090}'",
       "restartPolicyType": "ON_FAILURE"
     }
-  }
+}
