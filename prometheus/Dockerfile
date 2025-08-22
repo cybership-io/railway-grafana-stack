@@ -29,9 +29,6 @@ RUN echo "Downloading Prometheus version: ${VERSION}" \
        fi \
     && rm -rf prometheus-${VERSION#v}.linux-amd64*
 
-RUN if ! getent group nobody >/dev/null 2>&1; then addgroup -g 65534 nobody; fi \
-    && if ! getent passwd nobody >/dev/null 2>&1; then adduser -D -u 65534 -G nobody nobody; fi
-
 RUN chown -R nobody:nobody /etc/prometheus /prometheus
 
 COPY prom.yml /etc/prometheus/prom.yml
@@ -42,8 +39,6 @@ RUN chmod +x /start.sh
 USER nobody
 
 EXPOSE 9090
-
-VOLUME ["/prometheus"]
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT:-9090}/-/healthy || exit 1

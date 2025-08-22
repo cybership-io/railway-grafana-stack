@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e  # Exit on any error
+set -e
 
 PROMETHEUS_USER=${PROMETHEUS_USER:-admin}
 PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD:-admin}
