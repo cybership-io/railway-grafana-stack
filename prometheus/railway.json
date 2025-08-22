@@ -5,8 +5,6 @@
     "dockerfilePath": "prometheus/Dockerfile"
   },
   "deploy": {
-    "restartPolicyType": "ON_FAILURE",
-    "healthcheckPath": "/-/healthy",
-    "healthcheckTimeout": 30
+    "restartPolicyType": "ON_FAILURE"
   }
 }
