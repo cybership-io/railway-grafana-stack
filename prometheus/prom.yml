@@ -5,6 +5,9 @@ scrape_configs:
   - job_name: "prometheus"
     static_configs:
       - targets: ["localhost:9090"]
+    basic_auth:
+      username: ${PROMETHEUS_USER}
+      password: ${PROMETHEUS_PASSWORD}
 
   # Your server via Railway private networking
   - job_name: "server"
