@@ -43,13 +43,13 @@ EOF
 
 echo "Web config created successfully"
 
-mkdir -p /prometheus/secrets
+mkdir -p /etc/prometheus/secrets
 if [ -n "$PROMETHEUS_AUTH_TOKEN" ]; then
-    echo "$PROMETHEUS_AUTH_TOKEN" > /prometheus/secrets/token
-    chmod 600 /prometheus/secrets/token
+    echo "$PROMETHEUS_AUTH_TOKEN" > /etc/prometheus/secrets/token
+    chmod 600 /etc/prometheus/secrets/token
     echo "Auth token configured"
 else
-    touch /prometheus/secrets/token
+    touch /etc/prometheus/secrets/token
     echo "No auth token provided"
 fi
 
