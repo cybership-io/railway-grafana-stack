@@ -40,7 +40,7 @@ USER nobody
 
 EXPOSE 9090
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT:-9090}/-/healthy || exit 1
+# HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+#     CMD wget --no-verbose --tries=1 --spider http://localhost:$PORT/-/healthy || exit 1
 
 ENTRYPOINT ["/start.sh"]

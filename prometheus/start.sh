@@ -1,12 +1,13 @@
 #!/bin/sh
 
-set -e  
+set -e  # Exit on any error
 
 PROMETHEUS_USER=${PROMETHEUS_USER:-admin}
 PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD:-admin}
 
 echo "Starting Prometheus with user: $PROMETHEUS_USER"
-echo "Starting Prometheus with password: $PROMETHEUS_PASSWORD"
+
+echo "PORT environment variable: ${PORT:-9090}"
 
 if ! command -v python3 >/dev/null 2>&1; then
     echo "Error: python3 not found"
@@ -34,6 +35,7 @@ fi
 
 echo "Creating web config..."
 
+# Create a writable directory in the home directory
 mkdir -p /prometheus/config
 cat > /prometheus/config/web-config.yml << EOF
 basic_auth_users:
@@ -42,6 +44,7 @@ EOF
 
 echo "Web config created successfully"
 
+# Handle auth token in prometheus directory
 mkdir -p /prometheus/secrets
 if [ -n "$PROMETHEUS_AUTH_TOKEN" ]; then
     echo "$PROMETHEUS_AUTH_TOKEN" > /prometheus/secrets/token
@@ -52,7 +55,7 @@ else
     echo "No auth token provided"
 fi
 
-echo "Starting Prometheus..."
+echo "Starting Prometheus on port: ${PORT:-9090}"
 
 exec prometheus \
     --config.file=/etc/prometheus/prom.yml \
