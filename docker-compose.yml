@@ -11,6 +11,10 @@ services:
       - "9090:9090"
     volumes:
       - prometheus_data:/prometheus
+    environment:
+      - PROMETHEUS_USER=cybership
+      - PROMETHEUS_PASSWORD=cybership123
+      - PROMETHEUS_AUTH_TOKEN=${PROMETHEUS_AUTH_TOKEN:-}
 
   loki:
     build:
@@ -43,13 +47,15 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=yourpassword123
-      - GF_DEFAULT_INSTANCE_NAME=Grafana
-      - GF_INSTALL_PLUGINS=grafana-simple-json-datasource,grafana-piechart-panel,grafana-worldmap-panel,grafana-clock-panel
-      - LOKI_INTERNAL_URL=http://loki:3100
-      - PROMETHEUS_INTERNAL_URL=http://prometheus:9090
-      - TEMPO_INTERNAL_URL=http://tempo:3200
+    - GF_SECURITY_ADMIN_USER=admin
+    - GF_SECURITY_ADMIN_PASSWORD=yourpassword123
+    - GF_DEFAULT_INSTANCE_NAME=Grafana
+    - GF_INSTALL_PLUGINS=grafana-simple-json-datasource,grafana-piechart-panel,grafana-worldmap-panel,grafana-clock-panel
+    - LOKI_INTERNAL_URL=http://loki:3100
+    - PROMETHEUS_INTERNAL_URL=http://${PROMETHEUS_USER}:${PROMETHEUS_PASSWORD}@prometheus:9090
+    - TEMPO_INTERNAL_URL=http://tempo:3200
+    - PROMETHEUS_USER=cybership
+    - PROMETHEUS_PASSWORD=cybership123
   
   example_api: 
     build:
