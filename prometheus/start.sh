@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e
+set -e  
 
 PROMETHEUS_USER=${PROMETHEUS_USER:-admin}
 PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD:-admin}
@@ -33,20 +33,21 @@ fi
 
 echo "Creating web config..."
 
-cat > /tmp/web-config.yml << EOF
+mkdir -p /prometheus/config
+cat > /prometheus/config/web-config.yml << EOF
 basic_auth_users:
   ${PROMETHEUS_USER}: ${HASH}
 EOF
 
 echo "Web config created successfully"
 
-mkdir -p /tmp/secrets
+mkdir -p /prometheus/secrets
 if [ -n "$PROMETHEUS_AUTH_TOKEN" ]; then
-    echo "$PROMETHEUS_AUTH_TOKEN" > /tmp/secrets/token
-    chmod 600 /tmp/secrets/token
+    echo "$PROMETHEUS_AUTH_TOKEN" > /prometheus/secrets/token
+    chmod 600 /prometheus/secrets/token
     echo "Auth token configured"
 else
-    touch /tmp/secrets/token
+    touch /prometheus/secrets/token
     echo "No auth token provided"
 fi
 
@@ -54,7 +55,7 @@ echo "Starting Prometheus..."
 
 exec prometheus \
     --config.file=/etc/prometheus/prom.yml \
-    --web.config.file=`/tmp/web-config.yml `\
+    --web.config.file=/prometheus/config/web-config.yml \
     --storage.tsdb.path=/prometheus \
     --web.console.libraries=/etc/prometheus/console_libraries \
     --web.console.templates=/etc/prometheus/consoles \
