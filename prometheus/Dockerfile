@@ -1,22 +1,51 @@
 ARG VERSION=v3.2.1
 
-FROM prom/prometheus:${VERSION}
+FROM alpine:3.18
 
-USER root
+ARG VERSION=v3.2.1
 
-RUN apk add --no-cache apache2-utils || \
-    (apt-get update && apt-get install -y apache2-utils) || \
-    echo "Using built-in password generation"
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    wget \
+    ca-certificates \
+    && pip3 install bcrypt --break-system-packages
+
+RUN echo "Downloading Prometheus version: ${VERSION}" \
+    && wget https://github.com/prometheus/prometheus/releases/download/${VERSION}/prometheus-${VERSION#v}.linux-amd64.tar.gz \
+    && tar -xzf prometheus-${VERSION#v}.linux-amd64.tar.gz \
+    && mv prometheus-${VERSION#v}.linux-amd64/prometheus /bin/prometheus \
+    && mv prometheus-${VERSION#v}.linux-amd64/promtool /bin/promtool \
+    && mkdir -p /etc/prometheus /prometheus \
+    && if [ -d "prometheus-${VERSION#v}.linux-amd64/console_libraries" ]; then \
+         mv prometheus-${VERSION#v}.linux-amd64/console_libraries /etc/prometheus/; \
+       else \
+         mkdir -p /etc/prometheus/console_libraries; \
+       fi \
+    && if [ -d "prometheus-${VERSION#v}.linux-amd64/consoles" ]; then \
+         mv prometheus-${VERSION#v}.linux-amd64/consoles /etc/prometheus/; \
+       else \
+         mkdir -p /etc/prometheus/consoles; \
+       fi \
+    && rm -rf prometheus-${VERSION#v}.linux-amd64*
+
+RUN if ! getent group nobody >/dev/null 2>&1; then addgroup -g 65534 nobody; fi \
+    && if ! getent passwd nobody >/dev/null 2>&1; then adduser -D -u 65534 -G nobody nobody; fi
+
+RUN chown -R nobody:nobody /etc/prometheus /prometheus
 
 COPY prom.yml /etc/prometheus/prom.yml
 COPY start.sh /start.sh
+
 RUN chmod +x /start.sh
+
+USER nobody
 
 EXPOSE 9090
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider --auth-no-challenge \
-    --user=${PROMETHEUS_USER:-admin} --password=${PROMETHEUS_PASSWORD:-admin} \
-    http://localhost:${PORT:-9090}/-/healthy || exit 1
+VOLUME ["/prometheus"]
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT:-9090}/-/healthy || exit 1
 
 ENTRYPOINT ["/start.sh"]

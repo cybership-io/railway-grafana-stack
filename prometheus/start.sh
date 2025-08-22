@@ -1,26 +1,60 @@
 #!/bin/sh
 
-PROMETHEUS_USER=${PROMETHEUS_USER:-admin}
+set -e  # Exit on any error
 
+PROMETHEUS_USER=${PROMETHEUS_USER:-admin}
 PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD:-admin}
 
-cat > /etc/prometheus/web-config.yml << EOF
+echo "Starting Prometheus with user: $PROMETHEUS_USER"
+
+if ! command -v python3 >/dev/null 2>&1; then
+    echo "Error: python3 not found"
+    exit 1
+fi
+
+echo "Generating bcrypt hash for password..."
+HASH=$(python3 -c "
+import bcrypt
+import sys
+try:
+    password = '$PROMETHEUS_PASSWORD'.encode('utf-8')
+    salt = bcrypt.gensalt()
+    hash_bytes = bcrypt.hashpw(password, salt)
+    print(hash_bytes.decode('utf-8'))
+except Exception as e:
+    print(f'Error generating hash: {e}', file=sys.stderr)
+    sys.exit(1)
+")
+
+if [ -z "$HASH" ]; then
+    echo "Error: Failed to generate password hash"
+    exit 1
+fi
+
+echo "Creating web config..."
+
+cat > /tmp/web-config.yml << EOF
 basic_auth_users:
-  ${PROMETHEUS_USER}: $(htpasswd -nbB "" "${PROMETHEUS_PASSWORD}" | cut -d: -f2)
+  ${PROMETHEUS_USER}: ${HASH}
 EOF
 
-mkdir -p /etc/prometheus/secrets
+echo "Web config created successfully"
+
+mkdir -p /tmp/secrets
 if [ -n "$PROMETHEUS_AUTH_TOKEN" ]; then
-    echo "$PROMETHEUS_AUTH_TOKEN" > /etc/prometheus/secrets/token
-    chmod 600 /etc/prometheus/secrets/token
-    chown 65534:65534 /etc/prometheus/secrets/token
+    echo "$PROMETHEUS_AUTH_TOKEN" > /tmp/secrets/token
+    chmod 600 /tmp/secrets/token
+    echo "Auth token configured"
 else
-    touch /etc/prometheus/secrets/token
+    touch /tmp/secrets/token
+    echo "No auth token provided"
 fi
+
+echo "Starting Prometheus..."
 
 exec prometheus \
     --config.file=/etc/prometheus/prom.yml \
-    --web.config.file=/etc/prometheus/web-config.yml \
+    --web.config.file=`/tmp/web-config.yml `\
     --storage.tsdb.path=/prometheus \
     --web.console.libraries=/etc/prometheus/console_libraries \
     --web.console.templates=/etc/prometheus/consoles \

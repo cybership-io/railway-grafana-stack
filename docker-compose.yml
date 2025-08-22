@@ -12,8 +12,8 @@ services:
     volumes:
       - prometheus_data:/prometheus
     environment:
-      - PROMETHEUS_USER=cybership
-      - PROMETHEUS_PASSWORD=cybership123
+      - PROMETHEUS_USER=${PROMETHEUS_USER:-}
+      - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD:-}
       - PROMETHEUS_AUTH_TOKEN=${PROMETHEUS_AUTH_TOKEN:-}
 
   loki:
