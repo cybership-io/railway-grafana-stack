@@ -3,10 +3,12 @@ ARG VERSION=v3.2.1
 FROM prom/prometheus:${VERSION}
 
 USER root
-RUN apk add --no-cache apache2-utils
+
+RUN apk add --no-cache apache2-utils || \
+    (apt-get update && apt-get install -y apache2-utils) || \
+    echo "Using built-in password generation"
 
 COPY prom.yml /etc/prometheus/prom.yml
-
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
