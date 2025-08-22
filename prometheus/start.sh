@@ -6,6 +6,7 @@ PROMETHEUS_USER=${PROMETHEUS_USER:-admin}
 PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD:-admin}
 
 echo "Starting Prometheus with user: $PROMETHEUS_USER"
+echo "Starting Prometheus with password: $PROMETHEUS_PASSWORD"
 
 if ! command -v python3 >/dev/null 2>&1; then
     echo "Error: python3 not found"
