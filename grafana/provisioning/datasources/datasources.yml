@@ -38,10 +38,11 @@ datasources:
     orgId: 1
     uid: grafana_prometheus
     url: $PROMETHEUS_INTERNAL_URL
-    user:
+    user: $PROMETHEUS_USER
     database:
-    basicAuth:
-    basicAuthUser:
+    basicAuth: true
+    basicAuthUser: $PROMETHEUS_USER
+    basicAuthPassword: $PROMETHEUS_PASSWORD
     withCredentials:
     isDefault: false
     editable: true
