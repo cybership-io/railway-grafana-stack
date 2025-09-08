@@ -34,7 +34,7 @@ RUN chown -R nobody:nobody /etc/prometheus /prometheus
 # COPY prom.yml /etc/prometheus/prom.yml
 COPY setup.sh /setup.sh
 
-RUN chmod +x /setup.sh
+RUN chmod +x /setup.sh4
 
 USER nobody
 
