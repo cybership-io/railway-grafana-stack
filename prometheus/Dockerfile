@@ -31,10 +31,9 @@ RUN echo "Downloading Prometheus version: ${VERSION}" \
 
 RUN chown -R nobody:nobody /etc/prometheus /prometheus
 
-# COPY prom.yml /etc/prometheus/prom.yml
 COPY setup.sh /setup.sh
 
-RUN chmod +x /setup.sh4
+RUN chmod +x /setup.sh
 
 USER nobody
 

@@ -12,6 +12,7 @@ services:
     volumes:
       - prometheus_data:/prometheus
     environment:
+      - PROMETHEUS_TARGET=533091c26e39.ngrok-free.app
       - PROMETHEUS_USER=${PROMETHEUS_USER:-}
       - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD:-}
       - PROMETHEUS_AUTH_TOKEN=${PROMETHEUS_AUTH_TOKEN:-}
@@ -43,7 +44,7 @@ services:
       context: ./grafana
       dockerfile: dockerfile
     ports:
-      - "3000:3000"
+      - "3300:3000"
     volumes:
       - grafana_data:/var/lib/grafana
     environment:
@@ -52,7 +53,7 @@ services:
     - GF_DEFAULT_INSTANCE_NAME=Grafana
     - GF_INSTALL_PLUGINS=grafana-simple-json-datasource,grafana-piechart-panel,grafana-worldmap-panel,grafana-clock-panel
     - LOKI_INTERNAL_URL=http://loki:3100
-    - PROMETHEUS_INTERNAL_URL=http://${PROMETHEUS_USER}:${PROMETHEUS_PASSWORD}@prometheus:9090
+    - PROMETHEUS_INTERNAL_URL=http://prometheus:9090
     - TEMPO_INTERNAL_URL=http://tempo:3200
     - PROMETHEUS_USER=cybership
     - PROMETHEUS_PASSWORD=cybership123

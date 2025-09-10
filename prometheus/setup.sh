@@ -2,6 +2,7 @@
 
 set -e  
 
+PROMETHEUS_TARGET=${PROMETHEUS_TARGET:-server.railway.internal:3000}
 PROMETHEUS_USER=${PROMETHEUS_USER:-admin}
 PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD:-admin}
 
@@ -58,7 +59,7 @@ scrape_configs:
   - job_name: "server"
     scheme: http
     static_configs:
-      - targets: ["server.railway.internal:3000"]
+      - targets: ["${PROMETHEUS_TARGET}"]
     metrics_path: /metrics
     authorization:
       type: Bearer
