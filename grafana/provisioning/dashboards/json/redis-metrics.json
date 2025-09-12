@@ -1,0 +1,473 @@
+{
+	"dashboard": {
+		"id": null,
+		"title": "Redis Operations Dashboard",
+		"tags": ["redis", "performance", "cybership"],
+		"style": "dark",
+		"timezone": "browser",
+		"editable": true,
+		"hideControls": false,
+		"graphTooltip": 1,
+		"time": {
+			"from": "now-1h",
+			"to": "now"
+		},
+		"timepicker": {
+			"refresh_intervals": ["5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"],
+			"time_options": ["5m", "15m", "1h", "6h", "12h", "24h", "2d", "7d", "30d"]
+		},
+		"refresh": "30s",
+		"schemaVersion": 30,
+		"version": 1,
+		"panels": [
+			{
+				"id": 1,
+				"title": "Redis Operations - Average Duration by Operation",
+				"type": "stat",
+				"targets": [
+					{
+						"expr": "rate(redis_operation_duration_seconds_sum[5m]) / rate(redis_operation_duration_seconds_count[5m])",
+						"format": "time_series",
+						"legendFormat": "{{operation}}",
+						"refId": "A"
+					}
+				],
+				"fieldConfig": {
+					"defaults": {
+						"color": {
+							"mode": "palette-classic"
+						},
+						"custom": {
+							"displayMode": "list",
+							"orientation": "horizontal"
+						},
+						"mappings": [],
+						"thresholds": {
+							"steps": [
+								{
+									"color": "green",
+									"value": null
+								},
+								{
+									"color": "yellow",
+									"value": 0.01
+								},
+								{
+									"color": "red",
+									"value": 0.1
+								}
+							]
+						},
+						"unit": "s"
+					}
+				},
+				"options": {
+					"reduceOptions": {
+						"values": false,
+						"calcs": ["lastNotNull"],
+						"fields": ""
+					},
+					"orientation": "auto",
+					"text": {},
+					"textMode": "auto",
+					"colorMode": "value",
+					"graphMode": "area",
+					"justifyMode": "auto"
+				},
+				"pluginVersion": "8.0.0",
+				"gridPos": {
+					"h": 8,
+					"w": 12,
+					"x": 0,
+					"y": 0
+				}
+			},
+			{
+				"id": 2,
+				"title": "Redis Operations - P95 Latency",
+				"type": "stat",
+				"targets": [
+					{
+						"expr": "histogram_quantile(0.95, rate(redis_operation_duration_seconds_bucket[5m]))",
+						"format": "time_series",
+						"legendFormat": "{{operation}} P95",
+						"refId": "A"
+					}
+				],
+				"fieldConfig": {
+					"defaults": {
+						"color": {
+							"mode": "palette-classic"
+						},
+						"custom": {
+							"displayMode": "list",
+							"orientation": "horizontal"
+						},
+						"mappings": [],
+						"thresholds": {
+							"steps": [
+								{
+									"color": "green",
+									"value": null
+								},
+								{
+									"color": "yellow",
+									"value": 0.05
+								},
+								{
+									"color": "red",
+									"value": 0.2
+								}
+							]
+						},
+						"unit": "s"
+					}
+				},
+				"options": {
+					"reduceOptions": {
+						"values": false,
+						"calcs": ["lastNotNull"],
+						"fields": ""
+					},
+					"orientation": "auto",
+					"text": {},
+					"textMode": "auto",
+					"colorMode": "value",
+					"graphMode": "area",
+					"justifyMode": "auto"
+				},
+				"pluginVersion": "8.0.0",
+				"gridPos": {
+					"h": 8,
+					"w": 12,
+					"x": 12,
+					"y": 0
+				}
+			},
+			{
+				"id": 3,
+				"title": "Redis Operations - Throughput (Operations/sec)",
+				"type": "timeseries",
+				"targets": [
+					{
+						"expr": "rate(redis_operations_total[5m])",
+						"format": "time_series",
+						"legendFormat": "{{operation}}",
+						"refId": "A"
+					}
+				],
+				"fieldConfig": {
+					"defaults": {
+						"color": {
+							"mode": "palette-classic"
+						},
+						"custom": {
+							"axisLabel": "",
+							"axisPlacement": "auto",
+							"barAlignment": 0,
+							"drawStyle": "line",
+							"fillOpacity": 10,
+							"gradientMode": "none",
+							"hideFrom": {
+								"legend": false,
+								"tooltip": false,
+								"vis": false
+							},
+							"lineInterpolation": "linear",
+							"lineWidth": 1,
+							"pointSize": 5,
+							"scaleDistribution": {
+								"type": "linear"
+							},
+							"showPoints": "never",
+							"spanNulls": false,
+							"stacking": {
+								"group": "A",
+								"mode": "none"
+							},
+							"thresholdsStyle": {
+								"mode": "off"
+							}
+						},
+						"mappings": [],
+						"thresholds": {
+							"mode": "absolute",
+							"steps": [
+								{
+									"color": "green",
+									"value": null
+								}
+							]
+						},
+						"unit": "ops"
+					}
+				},
+				"options": {
+					"legend": {
+						"calcs": [],
+						"displayMode": "list",
+						"placement": "bottom"
+					},
+					"tooltip": {
+						"mode": "single"
+					}
+				},
+				"pluginVersion": "8.0.0",
+				"gridPos": {
+					"h": 8,
+					"w": 24,
+					"x": 0,
+					"y": 8
+				}
+			},
+			{
+				"id": 4,
+				"title": "Redis Operations - Duration Over Time",
+				"type": "timeseries",
+				"targets": [
+					{
+						"expr": "rate(redis_operation_duration_seconds_sum[5m]) / rate(redis_operation_duration_seconds_count[5m])",
+						"format": "time_series",
+						"legendFormat": "{{operation}} avg",
+						"refId": "A"
+					},
+					{
+						"expr": "histogram_quantile(0.95, rate(redis_operation_duration_seconds_bucket[5m]))",
+						"format": "time_series",
+						"legendFormat": "{{operation}} P95",
+						"refId": "B"
+					}
+				],
+				"fieldConfig": {
+					"defaults": {
+						"color": {
+							"mode": "palette-classic"
+						},
+						"custom": {
+							"axisLabel": "",
+							"axisPlacement": "auto",
+							"barAlignment": 0,
+							"drawStyle": "line",
+							"fillOpacity": 10,
+							"gradientMode": "none",
+							"hideFrom": {
+								"legend": false,
+								"tooltip": false,
+								"vis": false
+							},
+							"lineInterpolation": "linear",
+							"lineWidth": 1,
+							"pointSize": 5,
+							"scaleDistribution": {
+								"type": "linear"
+							},
+							"showPoints": "never",
+							"spanNulls": false,
+							"stacking": {
+								"group": "A",
+								"mode": "none"
+							},
+							"thresholdsStyle": {
+								"mode": "off"
+							}
+						},
+						"mappings": [],
+						"thresholds": {
+							"mode": "absolute",
+							"steps": [
+								{
+									"color": "green",
+									"value": null
+								},
+								{
+									"color": "yellow",
+									"value": 0.01
+								},
+								{
+									"color": "red",
+									"value": 0.1
+								}
+							]
+						},
+						"unit": "s"
+					}
+				},
+				"options": {
+					"legend": {
+						"calcs": [],
+						"displayMode": "list",
+						"placement": "bottom"
+					},
+					"tooltip": {
+						"mode": "single"
+					}
+				},
+				"pluginVersion": "8.0.0",
+				"gridPos": {
+					"h": 8,
+					"w": 24,
+					"x": 0,
+					"y": 16
+				}
+			},
+			{
+				"id": 5,
+				"title": "Redis Operations - Error Rate",
+				"type": "timeseries",
+				"targets": [
+					{
+						"expr": "rate(redis_operations_total{success=\"false\"}[5m]) / rate(redis_operations_total[5m]) * 100",
+						"format": "time_series",
+						"legendFormat": "{{operation}} error rate",
+						"refId": "A"
+					}
+				],
+				"fieldConfig": {
+					"defaults": {
+						"color": {
+							"mode": "palette-classic"
+						},
+						"custom": {
+							"axisLabel": "",
+							"axisPlacement": "auto",
+							"barAlignment": 0,
+							"drawStyle": "line",
+							"fillOpacity": 10,
+							"gradientMode": "none",
+							"hideFrom": {
+								"legend": false,
+								"tooltip": false,
+								"vis": false
+							},
+							"lineInterpolation": "linear",
+							"lineWidth": 1,
+							"pointSize": 5,
+							"scaleDistribution": {
+								"type": "linear"
+							},
+							"showPoints": "never",
+							"spanNulls": false,
+							"stacking": {
+								"group": "A",
+								"mode": "none"
+							},
+							"thresholdsStyle": {
+								"mode": "off"
+							}
+						},
+						"mappings": [],
+						"thresholds": {
+							"mode": "absolute",
+							"steps": [
+								{
+									"color": "green",
+									"value": null
+								},
+								{
+									"color": "yellow",
+									"value": 1
+								},
+								{
+									"color": "red",
+									"value": 5
+								}
+							]
+						},
+						"unit": "percent"
+					}
+				},
+				"options": {
+					"legend": {
+						"calcs": [],
+						"displayMode": "list",
+						"placement": "bottom"
+					},
+					"tooltip": {
+						"mode": "single"
+					}
+				},
+				"pluginVersion": "8.0.0",
+				"gridPos": {
+					"h": 8,
+					"w": 12,
+					"x": 0,
+					"y": 24
+				}
+			},
+			{
+				"id": 6,
+				"title": "Redis Connection Health",
+				"type": "stat",
+				"targets": [
+					{
+						"expr": "increase(redis_connections_total{event=\"connect\"}[1h])",
+						"format": "time_series",
+						"legendFormat": "Connections (1h)",
+						"refId": "A"
+					},
+					{
+						"expr": "increase(redis_connections_total{event=\"error\"}[1h])",
+						"format": "time_series",
+						"legendFormat": "Errors (1h)",
+						"refId": "B"
+					},
+					{
+						"expr": "increase(redis_connections_total{event=\"reconnecting\"}[1h])",
+						"format": "time_series",
+						"legendFormat": "Reconnects (1h)",
+						"refId": "C"
+					}
+				],
+				"fieldConfig": {
+					"defaults": {
+						"color": {
+							"mode": "palette-classic"
+						},
+						"custom": {
+							"displayMode": "list",
+							"orientation": "horizontal"
+						},
+						"mappings": [],
+						"thresholds": {
+							"steps": [
+								{
+									"color": "green",
+									"value": null
+								},
+								{
+									"color": "yellow",
+									"value": 1
+								},
+								{
+									"color": "red",
+									"value": 5
+								}
+							]
+						},
+						"unit": "short"
+					}
+				},
+				"options": {
+					"reduceOptions": {
+						"values": false,
+						"calcs": ["lastNotNull"],
+						"fields": ""
+					},
+					"orientation": "auto",
+					"text": {},
+					"textMode": "auto",
+					"colorMode": "value",
+					"graphMode": "area",
+					"justifyMode": "auto"
+				},
+				"pluginVersion": "8.0.0",
+				"gridPos": {
+					"h": 8,
+					"w": 12,
+					"x": 12,
+					"y": 24
+				}
+			}
+		]
+	}
+}

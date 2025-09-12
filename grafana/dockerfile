@@ -2,4 +2,16 @@ ARG VERSION=11.5.2
 
 FROM grafana/grafana-oss:${VERSION}
 
+USER root
+
+RUN apk add --no-cache curl
+
+COPY download-dashboards.sh /download-dashboards.sh
+
+RUN chmod +x /download-dashboards.sh && /download-dashboards.sh
+
 COPY provisioning /etc/grafana/provisioning
+
+RUN chown -R 472:472 /etc/grafana/provisioning
+
+USER grafana

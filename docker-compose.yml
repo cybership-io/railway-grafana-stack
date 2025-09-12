@@ -12,7 +12,7 @@ services:
     volumes:
       - prometheus_data:/prometheus
     environment:
-      - PROMETHEUS_TARGET=533091c26e39.ngrok-free.app
+      - PROMETHEUS_TARGET=8bcb43d6b571.ngrok-free.app
       - PROMETHEUS_USER=${PROMETHEUS_USER:-}
       - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD:-}
       - PROMETHEUS_AUTH_TOKEN=${PROMETHEUS_AUTH_TOKEN:-}
