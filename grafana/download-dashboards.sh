@@ -1,8 +1,9 @@
 #!/bin/sh
 mkdir -p /etc/grafana/provisioning/dashboards/files
 
-DASHBOARDS="api-debugging api-key-metrics app-overview business-metrics database-connections database-metrics integrations-metrics queue-metrics system-health-overview error-debugging redis-metrics"
 BASE_URL="https://s3.us-east-1.amazonaws.com/cdn.cybership.dev/observability/dashboards/json"
+
+DASHBOARDS=$(curl -s "${BASE_URL}/" | grep -oE '[^>]*\.json' | sed 's/\.json$//' | tr '\n' ' ')
 
 for dashboard in $DASHBOARDS; do
   echo "Downloading ${dashboard}.json..."
