@@ -112,68 +112,78 @@
 		},
 		{
 			"datasource": {
-				"type": "prometheus",
-				"uid": "grafana_prometheus"
+			  "type": "prometheus",
+			  "uid": "grafana_prometheus"
 			},
 			"fieldConfig": {
-				"defaults": {
-					"color": {
-						"mode": "thresholds"
-					},
-					"mappings": [],
-					"thresholds": {
-						"mode": "absolute",
-						"steps": [
-							{
-								"color": "green",
-								"value": null
-							},
-							{
-								"color": "yellow",
-								"value": 5
-							},
-							{
-								"color": "red",
-								"value": 10
-							}
-						]
-					},
-					"unit": "short"
+			  "defaults": {
+				"color": {
+				  "mode": "thresholds"
 				},
-				"overrides": []
+				"mappings": [],
+				"thresholds": {
+				  "mode": "absolute",
+				  "steps": [
+					{
+					  "color": "green",
+					  "value": null
+					},
+					{
+					  "color": "yellow",
+					  "value": 5
+					},
+					{
+					  "color": "red",
+					  "value": 10
+					}
+				  ]
+				},
+				"unit": "short"
+			  },
+			  "overrides": []
 			},
 			"gridPos": {
-				"h": 8,
-				"w": 6,
-				"x": 6,
-				"y": 8
+			  "h": 8,
+			  "w": 18,
+			  "x": 6,
+			  "y": 8
 			},
 			"id": 3,
 			"options": {
-				"colorMode": "value",
-				"graphMode": "area",
-				"justifyMode": "auto",
-				"orientation": "auto",
-				"reduceOptions": {
-					"calcs": [
-						"lastNotNull"
-					],
-					"fields": "",
-					"values": false
-				},
-				"textMode": "auto"
+			  "colorMode": "value",
+			  "graphMode": "area",
+			  "justifyMode": "auto",
+			  "orientation": "auto",
+			  "reduceOptions": {
+				"calcs": [
+				  "lastNotNull"
+				],
+				"fields": "",
+				"values": false
+			  },
+			  "textMode": "auto"
 			},
 			"pluginVersion": "10.0.3",
 			"targets": [
-				{
-					"expr": "count(count by (api_key_id)(api_key_requests_total))",
-					"legendFormat": "Active API Keys",
-					"refId": "A"
-				}
+			  {
+				"expr": "api_keys_total_count",
+				"legendFormat": "Total API Keys",
+				"refId": "A"
+			  },
+			  {
+				"expr": "api_keys_enabled_count",
+				"legendFormat": "Enabled API Keys",
+				"refId": "B"
+			  },
+			  {
+				"expr": "api_keys_active_count",
+				"legendFormat": "Active API Keys",
+				"refId": "C"
+			  }
 			],
-			"title": "Active API Keys",
+			"title": "API Keys Overview",
 			"type": "stat"
-		},
+		  },
 		{
 			"datasource": {
 				"type": "prometheus",

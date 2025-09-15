@@ -475,13 +475,13 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "topk(5, queue_jobs_active)",
+          "expr": "topk(5, sum(rate(queue_jobs_completed_total[5m])) by (queue_name))",
           "legendFormat": "{{queue_name}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Top 5 Queues by Active Jobs",
+      "title": "Top 5 Queues by Job Completion Rate",
       "type": "gauge"
     },
     {

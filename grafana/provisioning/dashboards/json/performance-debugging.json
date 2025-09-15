@@ -454,7 +454,7 @@
 						"uid": "${DS_PROMETHEUS}"
 					},
 					"editorMode": "code",
-					"expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]) by (le, route)) * 1000",
+					"expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, route)) * 1000",
 					"interval": "",
 					"legendFormat": "{{route}}",
 					"range": true,
@@ -549,7 +549,7 @@
 						"uid": "${DS_PROMETHEUS}"
 					},
 					"editorMode": "code",
-					"expr": "histogram_quantile(0.95, rate(queue_job_duration_seconds_bucket[5m]) by (le, queue_name))",
+					"expr": "histogram_quantile(0.95, sum(rate(queue_job_duration_seconds_bucket[5m])) by (le, queue_name))",
 					"interval": "",
 					"legendFormat": "{{queue_name}}",
 					"range": true,
@@ -644,7 +644,7 @@
 						"uid": "${DS_PROMETHEUS}"
 					},
 					"editorMode": "code",
-					"expr": "histogram_quantile(0.95, rate(integration_api_duration_seconds_bucket[5m]) by (le, integration)) * 1000",
+					"expr": "histogram_quantile(0.95, sum(rate(integration_api_duration_seconds_bucket[5m])) by (le, integration)) * 1000",
 					"interval": "",
 					"legendFormat": "{{integration}}",
 					"range": true,
