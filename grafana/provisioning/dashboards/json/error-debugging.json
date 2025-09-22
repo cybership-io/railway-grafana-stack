@@ -60,7 +60,7 @@
             "uid": "grafana_tempo"
           },
           "limit": 10,
-          "query": "{ trace:id = \"$trace_id\" && .service.name = \"cybership-server\" }",
+          "query": "{ trace:id =~ \"^$trace_id.*\" && .service.name = \"cybership-server\" }",
           "queryType": "traceql",
           "refId": "A"
         }
