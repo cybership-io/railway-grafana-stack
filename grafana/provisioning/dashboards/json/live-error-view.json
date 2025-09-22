@@ -1,0 +1,328 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 6,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "grafana_lokiq"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "shades"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "bars",
+            "fillOpacity": 34,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 3,
+            "pointSize": 6,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "count_over_time({service_name=\"cybership-server\", level=\"50\"} [5m])\n",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Error Logs over time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "grafana_lokiq"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "dedupStrategy": "none",
+        "enableInfiniteScrolling": false,
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "grafana_lokiq"
+          },
+          "direction": "backward",
+          "editorMode": "builder",
+          "expr": "{service_name=\"cybership-server\", level=\"50\"} |= `` | json",
+          "legendFormat": "",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Server Errors",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "delimiter": ",",
+            "format": "json",
+            "jsonPaths": [],
+            "keepTime": false,
+            "replace": false,
+            "source": "labels"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Line": true,
+              "Time": false,
+              "app": true,
+              "detected_level": true,
+              "environment": true,
+              "error": true,
+              "error_clientVersion": true,
+              "error_code": true,
+              "error_message": true,
+              "error_meta_error": true,
+              "error_meta_modelName": true,
+              "error_name": true,
+              "error_stack": true,
+              "fulfillment_order_id": true,
+              "hostname": true,
+              "id": true,
+              "jobData_fulfillment_order_id": true,
+              "jobData_order_data_billing_address_address1": true,
+              "jobData_order_data_billing_address_address2": true,
+              "jobData_order_data_billing_address_city": true,
+              "jobData_order_data_billing_address_company": true,
+              "jobData_order_data_billing_address_country": true,
+              "jobData_order_data_billing_address_name": true,
+              "jobData_order_data_billing_address_state": true,
+              "jobData_order_data_billing_address_zip": true,
+              "jobData_order_data_created_at": true,
+              "jobData_order_data_currency": true,
+              "jobData_order_data_customer_email": true,
+              "jobData_order_data_customer_name": true,
+              "jobData_order_data_note": true,
+              "jobData_order_data_order_number": true,
+              "jobData_order_data_payment_status": true,
+              "jobData_order_data_remote_id": true,
+              "jobData_order_data_shipping_address_address1": true,
+              "jobData_order_data_shipping_address_address2": true,
+              "jobData_order_data_shipping_address_city": true,
+              "jobData_order_data_shipping_address_company": true,
+              "jobData_order_data_shipping_address_country": true,
+              "jobData_order_data_shipping_address_name": true,
+              "jobData_order_data_shipping_address_state": true,
+              "jobData_order_data_shipping_address_zip": true,
+              "jobData_order_data_total_discount": true,
+              "jobData_order_data_total_price": true,
+              "jobData_order_data_total_shipping": true,
+              "jobData_order_data_total_tax": true,
+              "jobData_order_data_updated_at": true,
+              "jobData_product_stock_id": true,
+              "jobData_shop_id": true,
+              "jobId": true,
+              "labelTypes": true,
+              "labels": false,
+              "level": true,
+              "level_extracted": true,
+              "order_remote_id": true,
+              "pid": true,
+              "service_name": true,
+              "shop_id": true,
+              "source": true,
+              "time": true,
+              "tsNs": true
+            },
+            "includeByName": {},
+            "indexByName": {
+              "Line": 3,
+              "Time": 2,
+              "app": 7,
+              "detected_level": 8,
+              "environment": 9,
+              "error": 10,
+              "error_clientVersion": 18,
+              "error_code": 19,
+              "error_message": 20,
+              "error_meta_error": 21,
+              "error_meta_modelName": 22,
+              "error_name": 23,
+              "error_stack": 24,
+              "fulfillment_order_id": 61,
+              "hostname": 11,
+              "id": 6,
+              "jobData_fulfillment_order_id": 25,
+              "jobData_order_data_billing_address_address1": 46,
+              "jobData_order_data_billing_address_address2": 47,
+              "jobData_order_data_billing_address_city": 48,
+              "jobData_order_data_billing_address_company": 49,
+              "jobData_order_data_billing_address_country": 50,
+              "jobData_order_data_billing_address_name": 30,
+              "jobData_order_data_billing_address_state": 51,
+              "jobData_order_data_billing_address_zip": 52,
+              "jobData_order_data_created_at": 31,
+              "jobData_order_data_currency": 32,
+              "jobData_order_data_customer_email": 53,
+              "jobData_order_data_customer_name": 33,
+              "jobData_order_data_note": 34,
+              "jobData_order_data_order_number": 35,
+              "jobData_order_data_payment_status": 36,
+              "jobData_order_data_remote_id": 37,
+              "jobData_order_data_shipping_address_address1": 54,
+              "jobData_order_data_shipping_address_address2": 55,
+              "jobData_order_data_shipping_address_city": 56,
+              "jobData_order_data_shipping_address_company": 57,
+              "jobData_order_data_shipping_address_country": 58,
+              "jobData_order_data_shipping_address_name": 38,
+              "jobData_order_data_shipping_address_state": 59,
+              "jobData_order_data_shipping_address_zip": 60,
+              "jobData_order_data_total_discount": 39,
+              "jobData_order_data_total_price": 40,
+              "jobData_order_data_total_shipping": 41,
+              "jobData_order_data_total_tax": 42,
+              "jobData_order_data_updated_at": 43,
+              "jobData_product_stock_id": 26,
+              "jobData_shop_id": 44,
+              "jobData_team_id": 45,
+              "jobId": 12,
+              "labelTypes": 5,
+              "labels": 1,
+              "level": 13,
+              "level_extracted": 14,
+              "msg": 0,
+              "order_remote_id": 27,
+              "pid": 15,
+              "service_name": 16,
+              "shop_id": 28,
+              "source": 29,
+              "time": 17,
+              "tsNs": 4
+            },
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "logs"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 41,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Live Error View",
+  "uid": "6ffa3bbb-3fbb-4bd4-8d96-78c7fcc1a12a",
+  "version": 7
+}
