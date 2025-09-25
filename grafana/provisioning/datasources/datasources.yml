@@ -91,3 +91,16 @@ datasources:
         hide: false
       lokiSearch:
         datasourceUid: "grafana_lokiq"
+  - name: Infinity
+    uid: yesoreyeram-infinity-datasource
+    type: yesoreyeram-infinity-datasource
+    access: direct
+    url: $API_HOST
+    jsonData:
+      auth_method: 'bearerToken'
+      allowedHosts:
+        - '$API_HOST'
+    secureJsonData:
+      bearerToken: '$AUTH_TOKEN'
+    version: 1
+    editable: true

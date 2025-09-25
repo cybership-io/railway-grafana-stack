@@ -14,7 +14,7 @@ const traceExporter = new OTLPTraceExporter({
 // Create and register the SDK
 const sdk = new NodeSDK({
   resource: new Resource({
-    "service.name": process.env.TEMPO_SERVICE_NAME || 'unknown',
+    "service.name": process.env.TEMPO_SERVICE_NAME || 'cybership-server',
   }),
   traceExporter: traceExporter,
   instrumentations: [getNodeAutoInstrumentations()],
