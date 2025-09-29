@@ -12,7 +12,7 @@ services:
     volumes:
       - prometheus_data:/prometheus
     environment:
-      - PROMETHEUS_TARGET=spider-diverse-solely.ngrok-free.app
+      - PROMETHEUS_TARGET=${PROMETHEUS_TARGET}
       - PROMETHEUS_USER=${PROMETHEUS_USER:-}
       - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD:-}
       - PROMETHEUS_AUTH_TOKEN=${PROMETHEUS_AUTH_TOKEN:-}
