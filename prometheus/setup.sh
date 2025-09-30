@@ -65,6 +65,7 @@ scrape_configs:
       type: Bearer
       credentials_file: /etc/prometheus/secrets/token
     scrape_interval: 15s
+
 EOF
 
 echo "Prometheus configuration generated successfully"

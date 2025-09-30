@@ -1,0 +1,136 @@
+apiVersion: 1
+groups:
+  - name: system_alerts_v1
+    orgId: 1
+    folder: alerts
+    interval: 1m
+    rules:
+      - uid: cpu_usage_high
+        title: High CPU Usage
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasource:
+              type: prometheus
+              uid: grafana_prometheus
+            model:
+              expr: "rate(process_cpu_seconds_total{job=\"server\"}[5m]) * 100"
+              intervalMs: 1000
+              maxDataPoints: 43200
+        noDataState: NoData
+        execErrState: Alerting
+        for: 2m
+        annotations:
+          summary: "CPU usage is above 70%"
+          description: "CPU usage has been above 70% for more than 2 minutes"
+        labels:
+          severity: warning
+          service_name: cybership-server
+
+      - uid: memory_usage_high
+        title: High Memory Usage
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasource:
+              type: prometheus
+              uid: grafana_prometheus
+            model:
+              expr: "(process_resident_memory_bytes{job=\"server\"} / system_memory_total_bytes{job=\"server\"}) * 100"
+              intervalMs: 1000
+              maxDataPoints: 43200
+        noDataState: NoData
+        execErrState: Alerting
+        for: 2m
+        annotations:
+          summary: "Memory usage is above 70%"
+          description: "Memory usage has been above 70% for more than 2 minutes"
+        labels:
+          severity: warning
+          service_name: cybership-server
+
+      - uid: http_errors_high
+        title: High HTTP 5xx Error Rate
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasource:
+              type: prometheus
+              uid: grafana_prometheus
+            model:
+              expr: "sum(rate(http_requests_total{status=~\"5.*\"}[5m]))"
+              intervalMs: 1000
+              maxDataPoints: 43200
+        noDataState: NoData
+        execErrState: Alerting
+        for: 1m
+        annotations:
+          summary: "High rate of HTTP 5xx errors"
+          description: "HTTP 5xx error rate is elevated"
+        labels:
+          severity: critical
+          service_name: cybership-server
+
+      - uid: response_time_high
+        title: High Response Time
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasource:
+              type: prometheus
+              uid: grafana_prometheus
+            model:
+              expr: "histogram_quantile(0.95, rate(http_request_duration_ms_bucket[5m])) > 5000"
+              intervalMs: 1000
+              maxDataPoints: 43200
+        noDataState: NoData
+        execErrState: Alerting
+        for: 2m
+        annotations:
+          summary: "Response time is above 5 seconds"
+          description: "95th percentile response time has been above 5 seconds for more than 2 minutes"
+        labels:
+          severity: warning
+          service_name: cybership-server
+
+      - uid: application_errors_high
+        title: High Application Error Rate
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasource:
+              type: loki
+              uid: grafana_lokiq
+            model:
+              expr: "sum(rate({service_name=\"cybership-server\"} | json | level >= 50 [5m]))"
+              intervalMs: 1000
+              maxDataPoints: 43200
+        noDataState: NoData
+        execErrState: Alerting
+        for: 1m
+        annotations:
+          summary: "High application error rate"
+          description: "Application is logging errors at an elevated rate"
+        labels:
+          severity: critical
+          service_name: cybership-server
