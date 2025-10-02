@@ -57,8 +57,8 @@ services:
     - LOKI_INTERNAL_URL=http://loki:3100
     - PROMETHEUS_INTERNAL_URL=http://prometheus:9090
     - TEMPO_INTERNAL_URL=http://tempo:3200
-    - PROMETHEUS_USER=cybership
-    - PROMETHEUS_PASSWORD=cybership123
+    - PROMETHEUS_USER=admin
+    - PROMETHEUS_PASSWORD=admin
     - API_HOST=${API_HOST}
     - AUTH_TOKEN=${AUTH_TOKEN}
   
