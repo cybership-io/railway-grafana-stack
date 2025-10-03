@@ -61,6 +61,7 @@ services:
     - PROMETHEUS_PASSWORD=admin
     - API_HOST=${API_HOST}
     - AUTH_TOKEN=${AUTH_TOKEN}
+    - GF_ALERTING_ENABLED=${GF_ALERTING_ENABLED:-true}
   
   example_api: 
     build:

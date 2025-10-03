@@ -129,7 +129,7 @@ groups:
 
       - uid: http_errors_high
         title: High HTTP 5xx Error Rate
-        condition: A
+        condition: C
         data:
           - refId: A
             queryType: ""
@@ -141,6 +141,43 @@ groups:
               expr: "sum(rate(http_requests_total{status=~\"5.*\"}[5m]))"
               intervalMs: 1000
               maxDataPoints: 43200
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              reducer: last
+              type: reduce
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: B
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0.1
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
         noDataState: NoData
         execErrState: Alerting
         for: 1m
@@ -153,7 +190,7 @@ groups:
 
       - uid: response_time_high
         title: High Response Time
-        condition: A
+        condition: C
         data:
           - refId: A
             queryType: ""
@@ -162,22 +199,59 @@ groups:
               to: 0
             datasourceUid: grafana_prometheus
             model:
-              expr: "histogram_quantile(0.95, rate(http_request_duration_ms_bucket[5m])) > 5000"
+              expr: "sum(rate(http_request_duration_seconds_bucket{le=\"+Inf\"}[1m])) - sum(rate(http_request_duration_seconds_bucket{le=\"60\"}[1m]))"
               intervalMs: 1000
               maxDataPoints: 43200
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              reducer: last
+              type: reduce
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: B
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
         noDataState: NoData
         execErrState: Alerting
-        for: 2m
+        for: 0m
         annotations:
-          summary: "Response time is above 5 seconds"
-          description: "95th percentile response time has been above 5 seconds for more than 2 minutes"
+          summary: "Slow request detected (>1 minute)"
+          description: "One or more requests exceeded 60 seconds response time"
         labels:
           severity: warning
           service_name: cybership-server
 
       - uid: application_errors_high
         title: High Application Error Rate
-        condition: A
+        condition: C
         data:
           - refId: A
             queryType: ""
@@ -189,6 +263,43 @@ groups:
               expr: "sum(rate({service_name=\"cybership-server\"} | json | level >= 50 [5m]))"
               intervalMs: 1000
               maxDataPoints: 43200
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              reducer: last
+              type: reduce
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: B
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0.1
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
         noDataState: NoData
         execErrState: Alerting
         for: 1m
