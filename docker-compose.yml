@@ -62,6 +62,8 @@ services:
     - API_HOST=${API_HOST}
     - AUTH_TOKEN=${AUTH_TOKEN}
     - GF_ALERTING_ENABLED=${GF_ALERTING_ENABLED:-true}
+    - GF_SERVER_ROOT_URL=${GRAFANA_URL:-http://localhost:3300}
+    - GF_SERVER_DOMAIN=${GRAFANA_DOMAIN:-localhost}
   
   example_api: 
     build:
