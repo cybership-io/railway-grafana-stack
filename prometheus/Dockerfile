@@ -29,11 +29,11 @@ RUN echo "Downloading Prometheus version: ${VERSION}" \
        fi \
     && rm -rf prometheus-${VERSION#v}.linux-amd64*
 
-RUN chown -R nobody:nobody /etc/prometheus /prometheus
-
 COPY setup.sh /setup.sh
 
 RUN chmod +x /setup.sh
+
+RUN chown -R nobody:nobody /etc/prometheus /prometheus /setup.sh
 
 USER nobody
 
