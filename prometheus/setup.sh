@@ -3,7 +3,7 @@
 set -e
 
 PROMETHEUS_TARGET=${PROMETHEUS_TARGET:-server.railway.internal:3000}
-PROMETHEUS_USER=${PROMETHEUS_USER:-admin}
+PROMETHEUS_USER=${PROMETHEUS_USER:-cybership}
 PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD:-admin}
 
 echo "=========================================="
