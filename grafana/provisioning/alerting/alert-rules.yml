@@ -12,11 +12,11 @@ groups:
           - refId: A
             queryType: ""
             relativeTimeRange:
-              from: 300
+              from: 120
               to: 0
             datasourceUid: grafana_prometheus
             model:
-              expr: "rate(process_cpu_seconds_total{job=\"server\"}[5m]) * 100"
+              expr: "rate(process_cpu_seconds_total{job=\"server\"}[2m]) * 100"
               intervalMs: 1000
               maxDataPoints: 43200
           - refId: B
